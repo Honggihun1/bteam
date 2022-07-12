@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="com.example.project01">
+    <!-- 통신할려면 인터넷 권한 필요 -->
+    <uses-permission android:name="android.permission.INTERNET" /> <!-- 외부저장장치 쓰기 권한허용 -->
+    <uses-permission
+        android:name="android.permission.WRITE_EXTERNAL_STORAGE"
+        android:maxSdkVersion="18" /> <!-- 외부저장장치 읽기 권한허용 -->
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" /> <!-- 저장 위치 접근 허용 -->
+    <uses-permission android:name="android.permission.ACCESS_MEDIA_LOCATION" /> <!-- 카메라 권한 허용 -->
+    <uses-permission android:name="android.permission.CAMERA" /> <!-- 카메라 사용 -->
+    <uses-feature
+        android:name="camera"
+        android:required="true" /> <!-- API30이상에서는 queries사용해서 권한부여를 한번 더 해야함. -->
+    <queries>
+
+        <!-- WebView -->
+        <intent>
+            <action android:name="android.intent.action.VIEW" />
+
+            <category android:name="android.intent.category.BROWSABLE" />
+
+            <data android:scheme="http" />
+        </intent>
+        <intent>
+            <action android:name="android.intent.action.VIEW" />
+
+            <category android:name="android.intent.category.BROWSABLE" />
+
+            <data android:scheme="https" />
+        </intent>
+        <!-- Camera -->
+        <intent>
+            <action android:name="android.media.action.IMAGE_CAPTURE" />
+        </intent>
+        <!-- Gallery -->
+        <intent>
+            <action android:name="android.intent.action.GET_CONTENT" />
+        </intent>
+        <!-- Youtube -->
+        <intent>
+            <action android:name="android.media.browse.MediaBrowserService" />
+        </intent>
+    </queries>
+
+    <application
+        android:allowBackup="true"
+        android:icon="@mipmap/ic_launcher"
+        android:label="@string/app_name"
+        android:preserveLegacyExternalStorage="true"
+        android:requestLegacyExternalStorage="true"
+        android:roundIcon="@mipmap/ic_launcher_round"
+        android:supportsRtl="true"
+        android:theme="@style/Theme.Project01"
+        android:usesCleartextTraffic="true">
+        <activity
+            android:name=".FindSchool"
+            android:exported="true" />
+        <!-- 옆 3줄 / http 허용 / 외부 폴더 허용 -->
+        <activity
+            android:name=".FindId"
+            android:exported="true" />
+        <activity
+            android:name=".TCheck"
+            android:exported="true" />
+        <activity
+            android:name=".TSSelect"
+            android:exported="true" />
+        <activity
+            android:name=".SLogin"
+            android:exported="true" />
+        <activity
+            android:name=".TLogin"
+            android:exported="true" />
+        <activity
+            android:name=".Join"
+            android:exported="true" />
+        <activity
+            android:name=".Setting"
+            android:exported="true" />
+        <activity
+            android:name=".TSchedule"
+            android:exported="true" />
+        <activity
+            android:name=".SMain"
+            android:exported="true" />
+        <activity
+            android:name=".TMain"
+            android:exported="true" /> <!-- 첫 로딩 화면 구현 -->
+        <activity
+            android:name=".Loading"
+            android:exported="true"
+            android:theme="@style/SplashTheme">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+
+        <uses-library
+            android:name="org.apache.http.legacy"
+            android:required="false" /> <!-- 추가해줌 -->
+        <provider
+            android:name="androidx.core.content.FileProvider"
+            android:authorities="${applicationId}.fileprovider"
+            android:exported="false"
+            android:grantUriPermissions="true">
+            <meta-data
+                android:name="android.support.FILE_PROVIDER_PATHS"
+                android:resource="@xml/filepath" />
+        </provider>
+    </application>
+
+</manifest>

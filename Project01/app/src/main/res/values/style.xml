@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <style name="burger">
+        <item name="android:textColorSecondary">#6067FB</item>
+        <item name="android:fontFamily">@font/ridi</item>
+    </style>
+
+
+</resources>

@@ -1,0 +1,244 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="#ffffff"
+        android:orientation="vertical">
+
+    </LinearLayout>
+
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="30dp"
+        android:layout_marginTop="20dp"
+        android:src="@drawable/sclass" />
+
+
+    <LinearLayout
+        android:layout_width="400dp"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="60dp"
+        android:gravity="center_horizontal"
+        android:orientation="vertical">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="45dp"
+            android:layout_marginTop="15dp"
+            android:orientation="horizontal">
+
+            <EditText
+                android:id="@+id/etId"
+                android:layout_width="200dp"
+                android:layout_height="45dp"
+                android:layout_gravity="left"
+                android:layout_marginLeft="22dp"
+                android:layout_marginTop="10dp"
+                android:layout_marginRight="20dp"
+                android:background="@drawable/join_round"
+                android:gravity="center_vertical"
+                android:hint="아이디"
+                android:paddingLeft="20dp"
+                android:textColor="#5d20aa"
+                android:textColorHint="#80CB9EFF"
+                android:textCursorDrawable="@drawable/cursor"
+                android:textSize="20sp" />
+
+            <Button
+                android:id="@+id/btnId"
+                android:layout_width="130dp"
+                android:layout_height="50dp"
+                android:layout_margin="0dp"
+                android:padding="0dp"
+                android:text="아이디 중복확인"
+                android:textSize="16sp"
+                android:backgroundTint="#995584FB"/>
+
+
+        </LinearLayout>
+
+        <TextView
+            android:id="@+id/warn1"
+            android:layout_width="300dp"
+            android:layout_height="wrap_content"
+            android:textColor="#FF1A1A"
+            android:textSize="15sp" />
+
+        <EditText
+            android:id="@+id/etPw"
+            android:layout_width="350dp"
+            android:layout_height="45dp"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="0dp"
+            android:background="@drawable/join_round"
+            android:gravity="center_vertical"
+            android:hint="비밀번호"
+            android:inputType="textPassword"
+            android:paddingLeft="20dp"
+            android:textColor="#5d20aa"
+            android:textColorHint="#80CB9EFF"
+            android:textCursorDrawable="@drawable/cursor"
+            android:textSize="20sp" />
+
+        <EditText
+            android:id="@+id/etPwch"
+            android:layout_width="350dp"
+            android:layout_height="45dp"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="15dp"
+            android:background="@drawable/join_round"
+            android:gravity="center_vertical"
+            android:hint="비밀번호 확인"
+            android:inputType="textPassword"
+            android:paddingLeft="20dp"
+            android:textColor="#5d20aa"
+            android:textColorHint="#80CB9EFF"
+            android:textCursorDrawable="@drawable/cursor"
+            android:textSize="20sp" />
+
+        <TextView
+            android:id="@+id/warn2"
+            android:layout_width="300dp"
+            android:layout_height="wrap_content"
+            android:textColor="#FF1A1A"
+            android:textSize="10sp" />
+
+
+        <EditText
+            android:id="@+id/etName"
+            android:layout_width="350dp"
+            android:layout_height="45dp"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="5dp"
+            android:background="@drawable/join_round"
+            android:gravity="center_vertical"
+            android:hint="학생 이름"
+            android:paddingLeft="20dp"
+            android:textColor="#5d20aa"
+            android:textColorHint="#80CB9EFF"
+            android:textCursorDrawable="@drawable/cursor"
+            android:textSize="20sp" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="45dp"
+            android:layout_marginTop="15dp"
+            android:orientation="horizontal">
+
+
+            <EditText
+                android:id="@+id/etSchool"
+                android:layout_width="200dp"
+                android:layout_height="45dp"
+                android:layout_gravity="left"
+                android:layout_marginLeft="22dp"
+                android:layout_marginRight="20dp"
+                android:background="@drawable/join_round"
+                android:gravity="center_vertical"
+                android:hint="학교명을 입력하세요"
+                android:paddingLeft="20dp"
+                android:textColor="#5d20aa"
+                android:textColorHint="#80CB9EFF"
+                android:textCursorDrawable="@drawable/cursor"
+                android:textSize="20sp" />
+
+            <Button
+                android:id="@+id/btnSchool"
+                android:layout_width="130dp"
+                android:layout_height="50dp"
+                android:layout_margin="0dp"
+                android:padding="0dp"
+                android:text="학교명 찾기"
+                android:textSize="16sp"
+                android:backgroundTint="#995584FB"/>
+
+        </LinearLayout>
+
+
+        <EditText
+            android:id="@+id/etGrade"
+            android:layout_width="350dp"
+            android:layout_height="45dp"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="15dp"
+            android:background="@drawable/join_round"
+            android:gravity="center_vertical"
+            android:hint="학년"
+            android:inputType="number"
+            android:paddingLeft="20dp"
+            android:textColor="#5d20aa"
+            android:textColorHint="#80CB9EFF"
+            android:textCursorDrawable="@drawable/cursor"
+            android:textSize="20sp" />
+
+        <EditText
+            android:id="@+id/etPhoneParent"
+            android:layout_width="350dp"
+            android:layout_height="45dp"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="15dp"
+            android:background="@drawable/join_round"
+            android:gravity="center_vertical"
+            android:hint="부모님 전화번호 ex) 010-1234-5678"
+            android:paddingLeft="20dp"
+            android:textColor="#5d20aa"
+            android:textColorHint="#80CB9EFF"
+            android:textCursorDrawable="@drawable/cursor"
+            android:textSize="20sp" />
+
+        <EditText
+            android:id="@+id/etPhoneStudent"
+            android:layout_width="350dp"
+            android:layout_height="45dp"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="15dp"
+            android:background="@drawable/join_round"
+            android:gravity="center_vertical"
+            android:hint="학생 전화번호(선택)"
+            android:paddingLeft="20dp"
+            android:textColor="#5d20aa"
+            android:textColorHint="#80CB9EFF"
+            android:textCursorDrawable="@drawable/cursor"
+            android:textSize="20sp" />
+
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="100dp"
+            android:layout_marginTop="10dp"
+            android:gravity="center"
+            android:orientation="vertical">
+
+            <Button
+                android:id="@+id/btn1"
+                android:layout_width="350dp"
+                android:layout_height="50dp"
+                android:layout_gravity="center_horizontal"
+                android:backgroundTint="#995584FB"
+                android:text="회원가입"
+                android:textColor="#ffffff"
+                android:textSize="16sp"
+                app:cornerRadius="10dp" />
+
+            <Button
+                android:id="@+id/btn2"
+                android:layout_width="350dp"
+                android:layout_height="50dp"
+                android:backgroundTint="#CCEBECFF"
+                android:text="취소"
+                android:textColor="#5d20aa"
+                android:textSize="16sp"
+                app:cornerRadius="10dp" />
+
+        </LinearLayout>
+
+
+    </LinearLayout>
+
+</FrameLayout>

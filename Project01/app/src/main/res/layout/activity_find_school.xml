@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="#ffffff"
+        android:orientation="vertical">
+
+    </LinearLayout>
+
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="30dp"
+        android:layout_marginTop="20dp"
+        android:src="@drawable/sclass" />
+
+
+    <LinearLayout
+        android:layout_width="400dp"
+        android:layout_height="match_parent"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="60dp"
+        android:gravity="center_horizontal"
+        android:orientation="vertical">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+            <EditText
+                android:id="@+id/et1"
+                android:layout_width="200dp"
+                android:layout_height="45dp"
+                android:layout_gravity="left"
+                android:layout_marginLeft="22dp"
+                android:layout_marginRight="20dp"
+                android:background="@drawable/join_round"
+                android:gravity="center_vertical"
+                android:hint="학교명을 입력하세요"
+                android:paddingLeft="20dp"
+                android:textColor="#5d20aa"
+                android:textColorHint="#80CB9EFF"
+                android:textCursorDrawable="@drawable/cursor"
+                android:textSize="20sp" />
+            <Button
+                android:id="@+id/btn1"
+                android:layout_width="100dp"
+                android:layout_height="45dp"
+                android:text="찾기"/>
+        </LinearLayout>
+        <LinearLayout
+            android:layout_width="350dp"
+            android:layout_height="wrap_content"
+            android:weightSum="10">
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:text="학교명"
+                android:layout_weight="7"
+                android:textSize="20sp"
+                android:gravity="center"/>
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:text="소재지"
+                android:layout_weight="3"
+                android:textSize="20sp"
+                android:gravity="center"/>
+
+
+
+        </LinearLayout>
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/recyclerView"
+            android:layout_width="350dp"
+            android:layout_height="match_parent">
+
+        </androidx.recyclerview.widget.RecyclerView>
+
+
+    </LinearLayout>
+
+</FrameLayout>

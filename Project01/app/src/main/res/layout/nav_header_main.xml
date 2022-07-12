@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="240dp"
+    android:padding="16dp"
+    android:theme="@style/ThemeOverlay.AppCompat.Dark"
+>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:weightSum="10"
+        android:paddingTop="50dp">
+
+        <TextView
+            android:id="@+id/proId"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="4"
+            android:text="차은우 님"
+            android:textSize="25sp"
+            android:textColor="#000"
+            android:fontFamily="@font/ridi"
+            android:gravity="left"/>
+
+        <TextView
+            android:id="@+id/proName"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="3"
+            android:text="teacher01"
+            android:layout_marginTop="20dp"
+            android:textSize="20sp"
+            android:textColor="#000"
+            android:fontFamily="@font/ridi"
+            android:gravity="left"/>
+
+        <TextView
+            android:id="@+id/proPhone"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="3"
+            android:text="010-1111-2222"
+            android:textSize="18sp"
+            android:textColor="#000"
+            android:fontFamily="@font/ridi"
+            android:gravity="left"/>
+
+
+
+    </LinearLayout>
+
+
+
+</LinearLayout>

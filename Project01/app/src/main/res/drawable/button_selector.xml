@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<selector xmlns:android="http://schemas.android.com/apk/res/android">
+    <item android:state_pressed="true"> <!--눌렀을 때-->
+        <shape>
+            <gradient
+                android:startColor="#B3519CFE"
+                android:centerColor="#B38DA1FE"
+                android:endColor="#B3C291FE"
+                android:angle="315"/>
+            <corners
+                android:radius="10dp"/>
+        </shape>
+    </item>
+    <item android:state_pressed="false"><!-- 안눌렀을 때-->
+        <shape>
+            <gradient
+                android:startColor="#519cfe"
+                android:centerColor="#8da1fe"
+                android:endColor="#c291fe"
+                android:angle="315"/>
+            <corners
+                android:radius="10dp"/>
+
+
+        </shape>
+    </item>
+</selector>

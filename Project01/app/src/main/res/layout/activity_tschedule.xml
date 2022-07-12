@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<androidx.drawerlayout.widget.DrawerLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/drawerLayout"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:fitsSystemWindows="true"
+    tools:context=".TSchedule"
+    tools:openDrawer="start">
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:weightSum="100">
+
+        <!-- 바텀 네비 달아주기 위해 linearLayout 만들어서 weight = 90 줌 -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="92"
+            android:orientation="vertical"
+            android:weightSum="100">
+            <!--액션바-->
+            <com.google.android.material.appbar.AppBarLayout
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="10">
+                <!-- toolbar -->
+                <androidx.appcompat.widget.Toolbar
+                    android:id="@+id/toolbar"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_gravity="center_horizontal"
+                    android:background="#ffffff"
+                    android:gravity="center_horizontal"
+                    app:popupTheme="@style/burger"
+                    app:theme="@style/burger"> <!-- style.xml 에서 색 변경 가능 -->
+
+                    <ImageView
+                        android:layout_width="100dp"
+                        android:layout_height="30dp"
+                        android:layout_marginLeft="100dp"
+                        android:src="@drawable/titleschedule" /> <!-- 타이틀 이미지 여기 수정하면 됨 -->
+                </androidx.appcompat.widget.Toolbar>
+
+            </com.google.android.material.appbar.AppBarLayout>
+
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="90"
+                android:orientation="vertical"
+                android:weightSum="100">
+                <!-- 여기 밑에 내용 넣으면 됨 -->
+
+                <!--캘린더-->
+                <com.prolificinteractive.materialcalendarview.MaterialCalendarView
+                    android:id="@+id/calendarview"
+                    android:layout_width="wrap_content"
+                    android:layout_height="0dp"
+                    android:layout_gravity="center"
+                    android:layout_weight="60"
+                    app:mcv_selectionColor="#d2d2d2"
+                    app:mcv_showOtherDates="all" />
+
+                <TextView
+                    android:id="@+id/tv1"
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:layout_weight="6"
+                    android:gravity="center"
+                    android:text="날짜"
+                    android:textSize="24sp" />
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/recyclerView"
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:layout_weight="34">
+
+
+
+                </androidx.recyclerview.widget.RecyclerView>
+
+
+                <!-- 여기 위에 내용 넣으면 됨 -->
+            </LinearLayout>
+        </LinearLayout>
+
+        <!-- 바텀 네비 -->
+        <com.google.android.material.bottomnavigation.BottomNavigationView
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="8"
+            android:background="@drawable/bottom_border"
+            app:itemIconSize="30dp"
+            app:itemIconTint="@drawable/item_color"
+            app:itemTextColor="@drawable/item_color"
+            app:menu="@menu/bottom" />
+
+    </LinearLayout>
+    <!-- 버거메뉴 눌렀을 때 나오는 화면 -->
+    <com.google.android.material.navigation.NavigationView
+        android:id="@+id/nav_view"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:layout_gravity="start"
+        android:fitsSystemWindows="true"
+        app:headerLayout="@layout/nav_header_main"
+        app:menu="@menu/main_menu"/>
+
+
+</androidx.drawerlayout.widget.DrawerLayout>
