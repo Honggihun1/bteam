@@ -2,14 +2,18 @@ package com.example.project01;
 
 import static com.example.project01.common.CommonMethod.teacherDTO;
 
+import android.Manifest;
 import android.app.Activity;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
 import android.os.Bundle;
+import android.telephony.SmsManager;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.LinearLayout;
+import android.widget.Button;
+import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -19,47 +23,34 @@ import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 
 import com.example.project01.ATask.MemberDelete;
-import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.navigation.NavigationView;
 
 import java.util.concurrent.ExecutionException;
 
-public class TMain extends AppCompatActivity {
-
-
+public class THomeworkSend extends AppCompatActivity {
     Toolbar toolbar;
     DrawerLayout drawerLayout;
     NavigationView nav_view;
     ActionBar actionBar;
-    TextView tv1;
-    BottomNavigationView bottom_navi;
 
-    String state = "";
+    String state="";
 
-
-    LinearLayout tscheduleLayout, tclasslistLayout, thomeworkLayout, ttestLayout, tcheckLayout;
-
+    //TSend------------
+    EditText etPhone;
+    EditText etMessage;
+    Button btnHomeworkSend, btnCancel;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_tmain);
+        setContentView(R.layout.activity_thomework_send);
 
-        // 메인메뉴 클릭했을 때 이동할 수 있게 레이아웃 찾아줌
-        tscheduleLayout = findViewById(R.id.tscheduleLayout);
-        tclasslistLayout = findViewById(R.id.tclasslistLayout);
-        thomeworkLayout = findViewById(R.id.thomeworkLayout);
-        ttestLayout = findViewById(R.id.ttestLayout);
-        tcheckLayout = findViewById(R.id.tcheckLayout);
-        //bottom_navi = findViewById(R.id.bottom_navi);
-
-
-        // 찾기
-        tv1 = findViewById(R.id.tv1);
 
         // toolbar 적용
         toolbar = findViewById(R.id.toolbar);
@@ -74,48 +65,46 @@ public class TMain extends AppCompatActivity {
 
         ActionBarDrawerToggle toggle
                 = new ActionBarDrawerToggle(
-                this, drawerLayout, toolbar, R.string.drawer_open, R.string.drawer_close);
+                this, drawerLayout, toolbar, R.string.drawer_open, R.string.drawer_close );
         drawerLayout.addDrawerListener(toggle); // drawerLayout 에 toggle 을 붙임
 
         toggle.syncState();
 
-        // dto에서 데이터 가져오기 ( 이름 뜨게 함)
+        //THomeworkSend-------------
+        etPhone = findViewById(R.id.etPhone);
+        etMessage = findViewById(R.id.etMessage);
+        btnHomeworkSend = findViewById(R.id.btnHomeworkSend);
+        btnCancel = findViewById(R.id.btnCancel);
+
+        Intent intent = getIntent();
+        String homework = intent.getStringExtra("homework");
+        String classname = intent.getStringExtra("classname");
+        String avg = intent.getStringExtra("avg");
+        String max = intent.getStringExtra("max");
+        etMessage.setText("반 : "+classname);
+        etMessage.append("\n과제 : "+homework);
+        etMessage.append("\n평균 : "+avg);
+        etMessage.append("\n최고점 : "+max);
 
 
-        tv1.setText(teacherDTO.getTeacher_name() + "선생님 어서오세요");
-
-/*
-        // 바텀 네비 (공통) ///////////////////////////////////////////////////////////////////////////////////
-        bottom_navi.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
+        btnHomeworkSend.setOnClickListener(new View.OnClickListener() {
             @Override
-            public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-
-                switch (item.getItemId()){
-                    case R.id.bottom_icon1:
-
-                        Intent intent1 = new Intent(TMain.this, TMain.class);  // 이 부분 수정해줘야 함
-                        startActivity(intent1);
-
-                        break;
-                    case R.id.bottom_icon2:
-                        finish();
-                        Intent intent2 = new Intent(TMain.this, TCheck.class);  // 이 부분 수정해줘야 함
-                        startActivity(intent2);
-
-                        break;
-                    case R.id.bottom_icon3:
-                        finish();
-                        Intent intent3 = new Intent(TMain.this, TMain.class);  // 이 부분 수정해줘야 함 (미완성)
-                        startActivity(intent3);
-                        break;
+            public void onClick(View v) {
+                if(ContextCompat.checkSelfPermission(THomeworkSend.this, Manifest.permission.SEND_SMS)== PackageManager.PERMISSION_GRANTED){
+                    sendMessage();
+                }else{
+                    ActivityCompat.requestPermissions(THomeworkSend.this, new String[]{Manifest.permission.SEND_SMS}, 100);
                 }
-
-
-                return true;
             }
-        }); // 바텀네비
+        });
 
-*/
+        btnCancel.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
+            }
+        });
+
 
         // 버거메뉴 (공통)  ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
         // 버거메뉴 눌렀을 때 나오는 메뉴 찾아줌
@@ -128,7 +117,6 @@ public class TMain extends AppCompatActivity {
         TextView navName = headerView.findViewById(R.id.proId);
         TextView navId = headerView.findViewById(R.id.proName);
         TextView navPhone = headerView.findViewById(R.id.proPhone);
-
 
         navName.setText("반갑습니다 " + teacherDTO.getTeacher_name() + "님!!!");
         navId.setText("아이디 : " + teacherDTO.getTeacher_id());
@@ -146,7 +134,7 @@ public class TMain extends AppCompatActivity {
 
                 if (id == R.id.nav_logout) {
 
-                    new AlertDialog.Builder(TMain.this)
+                    new AlertDialog.Builder(THomeworkSend.this)
                             .setTitle("로그아웃")
                             .setMessage("로그아웃 하시겠습니까?")
                             .setPositiveButton("로그아웃", new DialogInterface.OnClickListener() {
@@ -154,14 +142,14 @@ public class TMain extends AppCompatActivity {
                                 public void onClick(DialogInterface dialog, int which) {
                                     //SharedPreferences에 저장된 값들을 로그아웃 버튼을 누르면 삭제하기 위해
                                     //SharedPreferences를 불러옵니다. 메인에서 만든 이름으로
-                                    Intent intent = new Intent(TMain.this, TLogin.class);
+                                    Intent intent = new Intent(THomeworkSend.this, TLogin.class);
                                     startActivity(intent);
                                     SharedPreferences auto = getSharedPreferences("setting", Activity.MODE_PRIVATE);
                                     SharedPreferences.Editor editor = auto.edit();
                                     //editor.clear()는 auto에 들어있는 모든 정보를 기기에서 지웁니다.
                                     editor.clear();
                                     editor.commit();
-                                    Toast.makeText(TMain.this, "로그아웃.", Toast.LENGTH_SHORT).show();
+                                    Toast.makeText(THomeworkSend.this, "로그아웃.", Toast.LENGTH_SHORT).show();
                                     finish();
                                 }
                             })
@@ -174,7 +162,7 @@ public class TMain extends AppCompatActivity {
 
                     // 계정 탈퇴 눌렀을 때
                 } else if (id == R.id.nav_withdraw) {
-                    new AlertDialog.Builder(TMain.this)
+                    new AlertDialog.Builder(THomeworkSend.this)
                             .setTitle("계정탈퇴")
                             .setMessage("계정 탈퇴 하시겠습니까?")
                             .setPositiveButton("탈퇴", new DialogInterface.OnClickListener() {
@@ -197,7 +185,7 @@ public class TMain extends AppCompatActivity {
                                     state = state.trim();
                                     // 정상적으로 데이터베이스에 삽입이 되면 1을 리턴, 아니면 0이하수를 리턴
                                     if (state.equals("1")) {
-                                        Toast.makeText(TMain.this,
+                                        Toast.makeText(THomeworkSend.this,
                                                 "정상적으로 회원탈퇴되었습니다", Toast.LENGTH_SHORT).show();
 
                                         // 종료하고 학생 메인화면으로
@@ -208,7 +196,7 @@ public class TMain extends AppCompatActivity {
                                         finish();
 
                                     } else {
-                                        Toast.makeText(TMain.this, "회원 탈퇴에 실패하였습니다", Toast.LENGTH_SHORT).show();
+                                        Toast.makeText(THomeworkSend.this, "회원 탈퇴에 실패하였습니다", Toast.LENGTH_SHORT).show();
                                     }
 
                                 }
@@ -219,9 +207,7 @@ public class TMain extends AppCompatActivity {
                         }
                     }).show();
 
-
                 }
-
 
                 // 메뉴 선택 후 드로어가 사라지게 한다
                 drawerLayout.closeDrawer(GravityCompat.START);
@@ -229,60 +215,46 @@ public class TMain extends AppCompatActivity {
 
             }
 
-        }); // 네비
-
-
-
-        ////////// 메인의 메뉴 (스케쥴) LinearLayout 클릭했을 때 //////////////////////////////////////////////
-        tscheduleLayout.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(TMain.this, TSchedule.class);
-
-                startActivity(intent);
-
-            }
-        });
-
-        tclasslistLayout.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(TMain.this, TClassList.class);
-
-                startActivity(intent);
-            }
-        });
-
-        thomeworkLayout.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(TMain.this, THomework.class);
-                startActivity(intent);
-            }
-        });
-
-        ttestLayout.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(TMain.this, TTest.class);
-                startActivity(intent);
-            }
-        });
-
-        tcheckLayout.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(TMain.this, TCheck.class);
-                startActivity(intent);
-            }
         });
 
 
 
-    } // onCreate()
+    } // onCreate
 
+    private void sendMessage() {
 
+        //int[] score = {100, 100, 90, 20};
+        String sPhone = "5556";
+        Intent intent = getIntent();
+        String homework = intent.getStringExtra("homework");
+        String classname = intent.getStringExtra("classname");
+        String avg = intent.getStringExtra("avg");
+        String max = intent.getStringExtra("max");
+        String[] sMessage = {classname + "\n" + homework + "\n평균 : " + avg + "\n최고점 : " +  max};
 
+        if(!sPhone.equals("") && !sMessage.equals("")){
+            SmsManager smsManager = SmsManager.getDefault();
+            //for(int i=0 ; i<score.length ; i++) {
+                smsManager.sendTextMessage(sPhone, null, sMessage[0], null, null);
+            //}
+            Toast.makeText(getApplicationContext(), "문자가 발송되었습니다.", Toast.LENGTH_LONG).show();
+        }else{
+            Toast.makeText(getApplicationContext(), "문자 발송 실패.", Toast.LENGTH_LONG).show();
+
+        }
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+
+        if(requestCode == 100 && grantResults.length > 0 && grantResults[0]==PackageManager.PERMISSION_GRANTED){
+            sendMessage();
+        }else{
+            Toast.makeText(getApplicationContext(), "권한 거절", Toast.LENGTH_SHORT).show();
+        }
+
+    }
 
     private long pressedTime;  // 뒤로가기 버튼 커스텀시 사용 (레이아웃 별 선택사항) ////////////////////////////////////////////////////////
 
@@ -295,26 +267,9 @@ public class TMain extends AppCompatActivity {
         if (drawerLayout.isDrawerOpen(GravityCompat.START)) {
             drawerLayout.closeDrawer(GravityCompat.START);
         } else {
-
-            //super.onBackPressed();
-            if (pressedTime == 0) {
-                Toast.makeText(TMain.this, "한번 더 누르면 종료됩니다", Toast.LENGTH_LONG).show();
-                pressedTime = System.currentTimeMillis();
-            } else {
-                int seconds = (int) (System.currentTimeMillis() - pressedTime);
-
-                if (seconds > 2000) {
-                    pressedTime = 0;
-                } else {
-                    finishAffinity();   // 모든 액티비티 종료
-                }
-            }
-
+            super.onBackPressed();  // 원래 선언한 작업
         }
 
 
     } // onBackPressed()
-
-
-
-} // class
+}

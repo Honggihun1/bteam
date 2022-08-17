@@ -1,12 +1,12 @@
 package com.example.project01;
 
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
+
+import androidx.appcompat.app.AppCompatActivity;
 
 import com.bumptech.glide.Glide;
 
@@ -26,7 +26,7 @@ public class TSSelect extends AppCompatActivity {
         // 배경지정
         back = findViewById(R.id.back);
         Glide.with(this)
-                .load(R.drawable.back4)
+                .load(R.drawable.bg1)
                 .centerCrop()
                 .into(back); 			// 이미지를 넣을 이미지뷰
 

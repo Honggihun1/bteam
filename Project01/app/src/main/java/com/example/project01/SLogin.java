@@ -169,7 +169,7 @@ public class SLogin extends AppCompatActivity {
         // 배경지정
         back = findViewById(R.id.back);
         Glide.with(this)
-                .load(R.drawable.back4)
+                .load(R.drawable.bg1)
                 .centerCrop()
                 .into(back);            // 이미지를 넣을 이미지뷰
 

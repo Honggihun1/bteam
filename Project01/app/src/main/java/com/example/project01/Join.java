@@ -106,9 +106,11 @@ public class Join extends AppCompatActivity {
 
                         if (idsDTO.getId().equals("0")) {
                             warn1.setText("");
-                            warn1.setText("중복되지 않는 아이디입니다");
+                            warn1.setTextColor(Color.parseColor("#3b55eb"));
+                            warn1.setText("사용가능한 아이디입니다");
                         } else {
                             warn1.setText("");
+                            warn1.setTextColor(Color.parseColor("#db1212"));
                             warn1.setText("중복된 아이디입니다");
                         }
                     } catch (Exception e) {
@@ -127,6 +129,7 @@ public class Join extends AppCompatActivity {
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
+                warn1.setTextColor(Color.parseColor("#db1212"));
                 warn1. setText("아이디 중복체크를 해주세요");
 
             }
@@ -173,7 +176,7 @@ public class Join extends AppCompatActivity {
 
                 if(! pw.equals(pwCh)){
                     etPwch.setTextColor(Color.RED);
-                    warn2.setText("비밀번화와 비밀번호 재입력이 일치하지 않습니다");
+                    warn2.setText("비밀번호와 비밀번호 재입력이 일치하지 않습니다");
                 }else{
                     etPwch.setTextColor(Color.parseColor("#5d20aa"));
                     warn2.setText("");

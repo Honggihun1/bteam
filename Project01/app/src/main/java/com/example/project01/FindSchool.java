@@ -74,7 +74,7 @@ public class FindSchool extends AppCompatActivity {
             @Override
             public void onItemClick(SchoolAdapter.ViewHolder holder, View view, int position) {
                 SchoolDTO dto = adapter.getItem(position);
-                Toast.makeText(FindSchool.this,"아이템 선택 " + dto.getSchool_location(),
+                Toast.makeText(FindSchool.this,"학교 선택 : " + dto.getSchool_name(),
                         Toast.LENGTH_LONG).show();
                 Intent reIntent = new Intent();
                 reIntent.putExtra("school_name", dto.getSchool_name());

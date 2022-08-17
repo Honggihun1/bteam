@@ -9,7 +9,7 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.LinearLayout;
+import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -21,50 +21,49 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.project01.ATask.MemberDelete;
+import com.example.project01.ATask.TTestCSelect;
+import com.example.project01.Adapter.TTestViewAdapter;
+import com.example.project01.DTO.TTestDTO;
+import com.example.project01.common.CommonMethod;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.navigation.NavigationView;
 
+import java.util.ArrayList;
 import java.util.concurrent.ExecutionException;
 
-public class TMain extends AppCompatActivity {
-
+public class TTest extends AppCompatActivity {
 
     Toolbar toolbar;
     DrawerLayout drawerLayout;
     NavigationView nav_view;
     ActionBar actionBar;
-    TextView tv1;
+
+    //recyclerView
+    Button btnSend;
+    RecyclerView recyclerView;
+
+    TTestViewAdapter adapter;
+
+    ArrayList<TTestDTO> dtos;
     BottomNavigationView bottom_navi;
-
-    String state = "";
-
-
-    LinearLayout tscheduleLayout, tclasslistLayout, thomeworkLayout, ttestLayout, tcheckLayout;
-
+    String state="";
+    String teacher_id = CommonMethod.teacherDTO.getTeacher_id();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_tmain);
-
-        // 메인메뉴 클릭했을 때 이동할 수 있게 레이아웃 찾아줌
-        tscheduleLayout = findViewById(R.id.tscheduleLayout);
-        tclasslistLayout = findViewById(R.id.tclasslistLayout);
-        thomeworkLayout = findViewById(R.id.thomeworkLayout);
-        ttestLayout = findViewById(R.id.ttestLayout);
-        tcheckLayout = findViewById(R.id.tcheckLayout);
-        //bottom_navi = findViewById(R.id.bottom_navi);
-
-
-        // 찾기
-        tv1 = findViewById(R.id.tv1);
+        setContentView(R.layout.activity_ttest);
 
         // toolbar 적용
         toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);  // 내가 만든 바를 액션바로 지정
         drawerLayout = findViewById(R.id.drawerLayout);
+
+      //  bottom_navi = findViewById(R.id.bottom_navi);
 
         actionBar = getSupportActionBar();
         ActionBar actionBar = getSupportActionBar();
@@ -79,43 +78,8 @@ public class TMain extends AppCompatActivity {
 
         toggle.syncState();
 
-        // dto에서 데이터 가져오기 ( 이름 뜨게 함)
 
 
-        tv1.setText(teacherDTO.getTeacher_name() + "선생님 어서오세요");
-
-/*
-        // 바텀 네비 (공통) ///////////////////////////////////////////////////////////////////////////////////
-        bottom_navi.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
-            @Override
-            public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-
-                switch (item.getItemId()){
-                    case R.id.bottom_icon1:
-
-                        Intent intent1 = new Intent(TMain.this, TMain.class);  // 이 부분 수정해줘야 함
-                        startActivity(intent1);
-
-                        break;
-                    case R.id.bottom_icon2:
-                        finish();
-                        Intent intent2 = new Intent(TMain.this, TCheck.class);  // 이 부분 수정해줘야 함
-                        startActivity(intent2);
-
-                        break;
-                    case R.id.bottom_icon3:
-                        finish();
-                        Intent intent3 = new Intent(TMain.this, TMain.class);  // 이 부분 수정해줘야 함 (미완성)
-                        startActivity(intent3);
-                        break;
-                }
-
-
-                return true;
-            }
-        }); // 바텀네비
-
-*/
 
         // 버거메뉴 (공통)  ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
         // 버거메뉴 눌렀을 때 나오는 메뉴 찾아줌
@@ -128,7 +92,6 @@ public class TMain extends AppCompatActivity {
         TextView navName = headerView.findViewById(R.id.proId);
         TextView navId = headerView.findViewById(R.id.proName);
         TextView navPhone = headerView.findViewById(R.id.proPhone);
-
 
         navName.setText("반갑습니다 " + teacherDTO.getTeacher_name() + "님!!!");
         navId.setText("아이디 : " + teacherDTO.getTeacher_id());
@@ -146,7 +109,7 @@ public class TMain extends AppCompatActivity {
 
                 if (id == R.id.nav_logout) {
 
-                    new AlertDialog.Builder(TMain.this)
+                    new AlertDialog.Builder(TTest.this)
                             .setTitle("로그아웃")
                             .setMessage("로그아웃 하시겠습니까?")
                             .setPositiveButton("로그아웃", new DialogInterface.OnClickListener() {
@@ -154,14 +117,14 @@ public class TMain extends AppCompatActivity {
                                 public void onClick(DialogInterface dialog, int which) {
                                     //SharedPreferences에 저장된 값들을 로그아웃 버튼을 누르면 삭제하기 위해
                                     //SharedPreferences를 불러옵니다. 메인에서 만든 이름으로
-                                    Intent intent = new Intent(TMain.this, TLogin.class);
+                                    Intent intent = new Intent(TTest.this, TLogin.class);
                                     startActivity(intent);
                                     SharedPreferences auto = getSharedPreferences("setting", Activity.MODE_PRIVATE);
                                     SharedPreferences.Editor editor = auto.edit();
                                     //editor.clear()는 auto에 들어있는 모든 정보를 기기에서 지웁니다.
                                     editor.clear();
                                     editor.commit();
-                                    Toast.makeText(TMain.this, "로그아웃.", Toast.LENGTH_SHORT).show();
+                                    Toast.makeText(TTest.this, "로그아웃.", Toast.LENGTH_SHORT).show();
                                     finish();
                                 }
                             })
@@ -174,7 +137,7 @@ public class TMain extends AppCompatActivity {
 
                     // 계정 탈퇴 눌렀을 때
                 } else if (id == R.id.nav_withdraw) {
-                    new AlertDialog.Builder(TMain.this)
+                    new AlertDialog.Builder(TTest.this)
                             .setTitle("계정탈퇴")
                             .setMessage("계정 탈퇴 하시겠습니까?")
                             .setPositiveButton("탈퇴", new DialogInterface.OnClickListener() {
@@ -197,7 +160,7 @@ public class TMain extends AppCompatActivity {
                                     state = state.trim();
                                     // 정상적으로 데이터베이스에 삽입이 되면 1을 리턴, 아니면 0이하수를 리턴
                                     if (state.equals("1")) {
-                                        Toast.makeText(TMain.this,
+                                        Toast.makeText(TTest.this,
                                                 "정상적으로 회원탈퇴되었습니다", Toast.LENGTH_SHORT).show();
 
                                         // 종료하고 학생 메인화면으로
@@ -208,7 +171,7 @@ public class TMain extends AppCompatActivity {
                                         finish();
 
                                     } else {
-                                        Toast.makeText(TMain.this, "회원 탈퇴에 실패하였습니다", Toast.LENGTH_SHORT).show();
+                                        Toast.makeText(TTest.this, "회원 탈퇴에 실패하였습니다", Toast.LENGTH_SHORT).show();
                                     }
 
                                 }
@@ -229,61 +192,28 @@ public class TMain extends AppCompatActivity {
 
             }
 
-        }); // 네비
-
-
-
-        ////////// 메인의 메뉴 (스케쥴) LinearLayout 클릭했을 때 //////////////////////////////////////////////
-        tscheduleLayout.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(TMain.this, TSchedule.class);
-
-                startActivity(intent);
-
-            }
-        });
-
-        tclasslistLayout.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(TMain.this, TClassList.class);
-
-                startActivity(intent);
-            }
-        });
-
-        thomeworkLayout.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(TMain.this, THomework.class);
-                startActivity(intent);
-            }
-        });
-
-        ttestLayout.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(TMain.this, TTest.class);
-                startActivity(intent);
-            }
-        });
-
-        tcheckLayout.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(TMain.this, TCheck.class);
-                startActivity(intent);
-            }
         });
 
 
 
-    } // onCreate()
 
 
 
+        //recycler view---------------------------------------------------------------------
+        dtos = new ArrayList<>();
+        recyclerView = findViewById(R.id.recyclerView);
+        LinearLayoutManager layoutManager = new LinearLayoutManager(this, RecyclerView.VERTICAL, false);
+        recyclerView.setLayoutManager(layoutManager);
 
+        adapter = new TTestViewAdapter(TTest.this, dtos);
+
+        recyclerView.setAdapter(adapter);
+
+
+        // 서버에 멤버들 ArrayList를 요구해서 가져온다 : AsyncTask 상속 받는 java
+        TTestCSelect tTestCSelect = new TTestCSelect(dtos, adapter, teacher_id);
+        tTestCSelect.execute();
+    }
     private long pressedTime;  // 뒤로가기 버튼 커스텀시 사용 (레이아웃 별 선택사항) ////////////////////////////////////////////////////////
 
     // 뒤로가기 버튼 2번 눌러야 종료
@@ -295,26 +225,33 @@ public class TMain extends AppCompatActivity {
         if (drawerLayout.isDrawerOpen(GravityCompat.START)) {
             drawerLayout.closeDrawer(GravityCompat.START);
         } else {
-
-            //super.onBackPressed();
-            if (pressedTime == 0) {
-                Toast.makeText(TMain.this, "한번 더 누르면 종료됩니다", Toast.LENGTH_LONG).show();
-                pressedTime = System.currentTimeMillis();
-            } else {
-                int seconds = (int) (System.currentTimeMillis() - pressedTime);
-
-                if (seconds > 2000) {
-                    pressedTime = 0;
-                } else {
-                    finishAffinity();   // 모든 액티비티 종료
-                }
-            }
-
+            super.onBackPressed();  // 원래 선언한 작업
         }
 
 
     } // onBackPressed()
+}
 
 
 
-} // class
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
