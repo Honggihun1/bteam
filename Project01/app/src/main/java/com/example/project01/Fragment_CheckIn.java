@@ -57,6 +57,7 @@ public class Fragment_CheckIn extends Fragment {
 
     public static HashMap<String, String> map = new HashMap<String, String>();
 
+
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -226,8 +227,7 @@ public class Fragment_CheckIn extends Fragment {
             int month = calendar.get(Calendar.MONTH);
             int year = calendar.get(Calendar.YEAR);
             String yymmdd = new SimpleDateFormat("yyyy-MM-dd").format(calendar.getTime());
-            //  Log.d(TAG, "진짜: " + yymmdd);
-            // Log.d(TAG, "참: " +month+"-" + date +"-"+ TScheduleAllSelect.map.get("2022-0"+month + "-"+ date));
+
             String chk = "0";
             if(map.get( yymmdd )== null){
                 chk = "0";
@@ -245,7 +245,7 @@ public class Fragment_CheckIn extends Fragment {
             // view.addSpan(new StyleSpan(Typeface.BOLD));   // 달력 안의 모든 숫자들이 볼드 처리됨
             //view.addSpan(new ForegroundColorSpan(Color.GREEN));
             //view.setBackgroundDrawable(drawable);
-            view.addSpan(new DotSpan(5, Color.RED));
+            view.addSpan(new DotSpan(7, Color.RED));
         }
     }
 

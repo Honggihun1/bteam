@@ -6,6 +6,13 @@ public class StudentDTO implements Serializable {
     private String student_id, student_pw, student_name, school_id, parent_phone, student_phone, class_id;
     private int grade;
 
+    // 학생 이름만 저장
+
+
+    public StudentDTO(String student_name) {
+        this.student_name = student_name;
+    }
+
     // 모든 정보 저장
     public StudentDTO(String student_id, String student_pw, String student_name, String school_id, String parent_phone, String student_phone, String class_id, int grade) {
         this.student_id = student_id;
@@ -28,6 +35,7 @@ public class StudentDTO implements Serializable {
         this.class_id = class_id;
         this.grade = grade;
     }
+
 
     public String getStudent_id() {
         return student_id;

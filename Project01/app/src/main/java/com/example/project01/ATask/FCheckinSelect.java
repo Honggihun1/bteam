@@ -7,8 +7,8 @@ import android.os.AsyncTask;
 import android.util.JsonReader;
 import android.util.Log;
 
-import com.example.project01.Adapter.SchoolAdapter;
-import com.example.project01.DTO.SchoolDTO;
+import com.example.project01.Adapter.FCheckinAdapter;
+import com.example.project01.DTO.FCheckinDTO;
 
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
@@ -23,23 +23,25 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.nio.charset.Charset;
 import java.util.ArrayList;
+import java.util.HashMap;
 
-public class FindSchoolSelect extends AsyncTask<Void, Void, Void> {
+public class FCheckinSelect extends AsyncTask<Void, Void, Void> {
+
     static String TAG = "확인";
-    ArrayList<SchoolDTO> dtos;
-    SchoolAdapter adapter;
-    String school_name;
-
+    ArrayList<FCheckinDTO> dtos;
+    FCheckinAdapter adapter;
+    String schedule_date;
+    String student_id;
 
     // 우리는 무조건 생성자를 만들어서 데이터를 넘겨받는다
-    public FindSchoolSelect(ArrayList<SchoolDTO> dtos, SchoolAdapter adapter, String school_name) {
+
+
+    public FCheckinSelect(ArrayList<FCheckinDTO> dtos, FCheckinAdapter adapter, String schedule_date, String student_id) {
         this.dtos = dtos;
         this.adapter = adapter;
-        this.school_name = school_name;
+        this.schedule_date = schedule_date;
+        this.student_id = student_id;
     }
-
-
-
 
     // 반드시 선언해야 할것들 : 무조건 해야함 복,붙
     HttpClient httpClient;       // 클라이언트 객체
@@ -56,14 +58,16 @@ public class FindSchoolSelect extends AsyncTask<Void, Void, Void> {
             MultipartEntityBuilder builder = MultipartEntityBuilder.create();
             builder.setMode(HttpMultipartMode.BROWSER_COMPATIBLE);
             builder.setCharset(Charset.forName("UTF-8"));
-
+            Log.d(TAG, "checkin: " + schedule_date);
             // 여기가 우리가 수정해야 하는 부분 : 서버로 보내는 데이터
             // builder에 문자열 및 파일 첨부하는곳
-            builder.addTextBody("school_name", school_name, ContentType.create("Multipart/related", "utf-8"));
+
+            builder.addTextBody("checkin_date", schedule_date, ContentType.create("Multipart/related", "utf-8"));
+            builder.addTextBody("student_id", student_id, ContentType.create("Multipart/related", "utf-8"));
 
             // 전송
             // 전송 Url : 우리가 수정해야 하는 부분
-            String postURL = ipConfig + "/app/hongSchoolSelect";  // 서블릿에 연결해주는 키워드
+            String postURL = ipConfig + "/app/FCheckinSelect";  // 서블릿에 연결해주는 키워드
 
             // 그대로 복,붙
             InputStream inputStream = null;
@@ -73,7 +77,6 @@ public class FindSchoolSelect extends AsyncTask<Void, Void, Void> {
             httpResponse = httpClient.execute(httpPost); // 보내고 응답받는 부분
             httpEntity = httpResponse.getEntity();  // 응답내용을 저장
             inputStream = httpEntity.getContent();  // 응답내용을 inputStream에 넣음
-
             // 응답처리 : 데이터가 ArrayList<DTO> 형태 :
             readJsonStream(inputStream);
 
@@ -108,10 +111,14 @@ public class FindSchoolSelect extends AsyncTask<Void, Void, Void> {
 
     // ArrayList<DTO>로 넘어왔을때
     private void readJsonStream(InputStream inputStream) throws IOException {
-        JsonReader reader = new JsonReader
-                (new InputStreamReader(inputStream, "utf-8"));
+        Log.d(TAG, "111: " );
+
+        JsonReader reader = new JsonReader (new InputStreamReader(inputStream, "utf-8"));
+        Log.d(TAG, "222: " );
         try {
             reader.beginArray();
+            Log.d(TAG, "333: " );
+
             while (reader.hasNext()){
                 dtos.add(readMessage(reader));
             }
@@ -124,44 +131,33 @@ public class FindSchoolSelect extends AsyncTask<Void, Void, Void> {
         }
 
     }
+    public static HashMap<String, String> map = new HashMap<String, String>();
 
+    //public Sting[] schedule_list
     // 하나의 DTO형태로 데이터를 받을때 파싱하는 부분
-    private SchoolDTO readMessage(JsonReader reader) throws IOException {
-        String school_name="", school_id="", location_id="", type_id="", school_location="";
+    private FCheckinDTO readMessage(JsonReader reader) throws IOException {
+        String checkin_date="",checkin_hour="", checkout_hour="";
 
         reader.beginObject();
         Log.d(TAG, "readMessage확인: "+ reader);
         while (reader.hasNext()){
             String readStr = reader.nextName();
             Log.d(TAG, "readStr : "+ readStr);
-            if(readStr.equals("school_name")){
-                school_name = reader.nextString();
-            }else if(readStr.equals("school_id")){
-                school_id = reader.nextString();
-            }else if(readStr.equals("location_id")){
-                location_id = reader.nextString();
-            }else if(readStr.equals("type_id")){
-                type_id = reader.nextString();
-            }else if(readStr.equals("school_location")){
-                school_location = reader.nextString();
+            if(readStr.equals("checkin_date")){
+                checkin_date = reader.nextString();
+            }else if(readStr.equals("checkin_hour")){
+                checkin_hour = reader.nextString();
+            }else if(readStr.equals("checkout_hour")){
+                checkout_hour = reader.nextString();
             }else {
                 reader.skipValue();
             }
         } // while
         reader.endObject();
 
-        Log.d(TAG, "school_name : "+ school_name);
-        Log.d(TAG, "school_location : "+ school_location);
-        return new SchoolDTO(school_id, school_name, location_id, type_id, school_location);
+        Log.d(TAG, "checkin: "+ checkin_hour);
+        Log.d(TAG, "checkout: "+ checkout_hour);
+
+        return new FCheckinDTO(checkin_date, checkin_hour,checkout_hour);
     }
-
-
-
-
-
-
-
-
-
-
 }

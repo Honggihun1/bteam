@@ -10,23 +10,22 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.project01.DTO.TScheduleDTO;
+import com.example.project01.DTO.FCheckinDTO;
 import com.example.project01.R;
 
 import java.util.ArrayList;
 
-public class TScheduleAdapter extends RecyclerView.Adapter<TScheduleAdapter.ViewHolder> {
+public class FCheckinAdapter extends RecyclerView.Adapter<FCheckinAdapter.ViewHolder> {
     static String TAG = "확인";
-
 
     // 3. 메인한테 넘겨 받는것
     Context context;
-    ArrayList<TScheduleDTO> dtos;
+    ArrayList<FCheckinDTO> dtos;
 
     LayoutInflater inflater;
 
     // 4. 생성자를 만들어 메인에게서 넘겨받은것을 연결
-    public TScheduleAdapter(Context context, ArrayList<TScheduleDTO> dtos) {
+    public FCheckinAdapter(Context context, ArrayList<FCheckinDTO> dtos) {
         this.context = context;
         this.dtos = dtos;
         inflater = LayoutInflater.from(this.context);
@@ -42,15 +41,17 @@ public class TScheduleAdapter extends RecyclerView.Adapter<TScheduleAdapter.View
         return new ViewHolder(itemView);
     }
 
-
     // 7. 인플레이트 시킨 화면에 데이터를 셋팅시킨다
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         // dtos에 있는 데이터를 순서대로 불러온다
-       TScheduleDTO dto = dtos.get(position); // 다섯개라고 가정하면 position은 0~4
+        FCheckinDTO dto = dtos.get(position); // 다섯개라고 가정하면 position은 0~4
         // 불러온 데이터를 ViewHolder에 만들어 놓은 setDto를 사용하여 셋팅한다
         holder.setDto(dto);
     }
+
+
+
 
     @Override
     public int getItemCount() {
@@ -72,12 +73,22 @@ public class TScheduleAdapter extends RecyclerView.Adapter<TScheduleAdapter.View
         }
 
         // 1-3. 함수를 만들어서 singerview에 데이터를 연결시킨다
-        public void setDto(TScheduleDTO dto){
+        public void setDto(FCheckinDTO dto){
+            Log.d(TAG, "chekin_hour: " + dto.getCheckin_hour());
+            Log.d(TAG, "chekout_hour: " + dto.getCheckout_hour());
 
-            tv1.setText(dto.getSchedule());
-            Log.d(TAG, "setDto확인: "+ dto.getSchedule());
+            String checkout="";
+
+            if(dto.getCheckout_hour().length()<10){
+                checkout= "미퇴실";
+            }else{
+                checkout = dto.getCheckout_hour().substring(11);
+            }
+
+            String checkin = dto.getCheckin_hour().substring(11);
+
+            tv1.setText(checkin + " ~ " + checkout);
+
         }
     }
-
-
 }

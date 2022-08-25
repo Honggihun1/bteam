@@ -260,6 +260,12 @@ public class SMain extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 String class_id = etclass.getText().toString();
+
+                if(class_id.equals("")){
+                    Toast.makeText(SMain.this,"클래스ID를 입력해주세요", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+
                 SclassPlus sclassPlus = new SclassPlus(studentDTO.getStudent_id(), class_id);
                 try{
                     state = sclassPlus.execute().get();

@@ -1,9 +1,10 @@
 package com.example.project01.DTO;
 
-public class TScheduleDTO {
+public class TScheduleAllDTO {
+
     private String schedule, schedule_date;
 
-    public TScheduleDTO(String schedule, String schedule_date) {
+    public TScheduleAllDTO(String schedule, String schedule_date) {
         this.schedule = schedule;
         this.schedule_date = schedule_date;
     }
@@ -11,6 +12,7 @@ public class TScheduleDTO {
     public String getSchedule() {
         return schedule;
     }
+
     public void setSchedule(String schedule) {
         this.schedule = schedule;
     }

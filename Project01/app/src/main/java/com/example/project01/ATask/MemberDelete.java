@@ -19,20 +19,13 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.nio.charset.Charset;
 
-public class JoinInsert extends AsyncTask<Void, Void, String> {
+public class MemberDelete extends AsyncTask<Void, Void, String> {
     private static final String TAG = "확인용";
-    String id, pw, name, school, phone_parent, phone_student, grade;
+    String teacher_id;
     String state = "";
 
-    public JoinInsert(String id, String pw, String name, String school, String grade, String phone_parent, String phone_student) {
-        this.id = id;
-        this.pw = pw;
-        this.name = name;
-        this.school = school;
-        this.grade = grade;
-        this.phone_parent = phone_parent;
-        this.phone_student = phone_student;
-
+    public MemberDelete(String teacher_id) {
+        this.teacher_id = teacher_id;
     }
 
     // 반드시 선언해야 할것들 : 무조건 해야함 복,붙
@@ -53,20 +46,13 @@ public class JoinInsert extends AsyncTask<Void, Void, String> {
 
             // 여기가 우리가 수정해야 하는 부분 : 서버로 보내는 데이터
             // builder에 문자열 및 파일 첨부하는곳
-            builder.addTextBody("id", id, ContentType.create("Multipart/related", "UTF-8"));
-            builder.addTextBody("pw", pw, ContentType.create("Multipart/related", "UTF-8"));
-            builder.addTextBody("name", name, ContentType.create("Multipart/related", "UTF-8"));
-            builder.addTextBody("school", school, ContentType.create("Multipart/related", "UTF-8"));
-            builder.addTextBody("grade", grade, ContentType.create("Multipart/related", "UTF-8"));
-            builder.addTextBody("phone_parent", phone_parent, ContentType.create("Multipart/related", "UTF-8"));
-            builder.addTextBody("phone_student", phone_student, ContentType.create("Multipart/related", "UTF-8"));
-
+            builder.addTextBody("teacher_id", teacher_id, ContentType.create("Multipart/related", "UTF-8"));
 
 
             // 전송
             // 전송 Url : 우리가 수정해야 하는 부분
             //String postURL = "http://211.223.59.27" + "/app/HongJoin";
-            String postURL = ipConfig + "/app/HongJoin";
+            String postURL = ipConfig + "/app/HongDelete";
 
             // 그대로 복,붙
             InputStream inputStream = null;

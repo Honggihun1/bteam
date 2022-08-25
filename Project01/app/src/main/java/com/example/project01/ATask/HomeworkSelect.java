@@ -7,8 +7,8 @@ import android.os.AsyncTask;
 import android.util.JsonReader;
 import android.util.Log;
 
-import com.example.project01.Adapter.SchoolAdapter;
-import com.example.project01.DTO.SchoolDTO;
+import com.example.project01.Adapter.HomeworkAdapter;
+import com.example.project01.DTO.HomeworkDTO;
 
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
@@ -24,22 +24,18 @@ import java.io.InputStreamReader;
 import java.nio.charset.Charset;
 import java.util.ArrayList;
 
-public class FindSchoolSelect extends AsyncTask<Void, Void, Void> {
+public class HomeworkSelect extends AsyncTask<Void, Void, Void> {
     static String TAG = "확인";
-    ArrayList<SchoolDTO> dtos;
-    SchoolAdapter adapter;
-    String school_name;
-
+    String student_id;
+    ArrayList<HomeworkDTO> dtos;
+    HomeworkAdapter adapter;
 
     // 우리는 무조건 생성자를 만들어서 데이터를 넘겨받는다
-    public FindSchoolSelect(ArrayList<SchoolDTO> dtos, SchoolAdapter adapter, String school_name) {
+    public HomeworkSelect(ArrayList<HomeworkDTO> dtos, HomeworkAdapter adapter, String student_id) {
         this.dtos = dtos;
         this.adapter = adapter;
-        this.school_name = school_name;
+        this.student_id = student_id;
     }
-
-
-
 
     // 반드시 선언해야 할것들 : 무조건 해야함 복,붙
     HttpClient httpClient;       // 클라이언트 객체
@@ -59,11 +55,12 @@ public class FindSchoolSelect extends AsyncTask<Void, Void, Void> {
 
             // 여기가 우리가 수정해야 하는 부분 : 서버로 보내는 데이터
             // builder에 문자열 및 파일 첨부하는곳
-            builder.addTextBody("school_name", school_name, ContentType.create("Multipart/related", "utf-8"));
+            builder.addTextBody("student_id", student_id, ContentType.create("Multipart/related", "utf-8"));
 
+            Log.d(TAG, "11: " + student_id);
             // 전송
             // 전송 Url : 우리가 수정해야 하는 부분
-            String postURL = ipConfig + "/app/hongSchoolSelect";  // 서블릿에 연결해주는 키워드
+            String postURL = ipConfig + "/app/HomeworkSelect";  // 서블릿에 연결해주는 키워드
 
             // 그대로 복,붙
             InputStream inputStream = null;
@@ -74,22 +71,23 @@ public class FindSchoolSelect extends AsyncTask<Void, Void, Void> {
             httpEntity = httpResponse.getEntity();  // 응답내용을 저장
             inputStream = httpEntity.getContent();  // 응답내용을 inputStream에 넣음
 
+            Log.d(TAG, "11: " + inputStream);
             // 응답처리 : 데이터가 ArrayList<DTO> 형태 :
             readJsonStream(inputStream);
 
-        }catch (Exception e){
+        } catch (Exception e) {
             e.getMessage();
-        }finally {
-            if(httpEntity != null){
+        } finally {
+            if (httpEntity != null) {
                 httpEntity = null;
             }
-            if(httpResponse != null){
+            if (httpResponse != null) {
                 httpResponse = null;
             }
-            if(httpPost != null){
+            if (httpPost != null) {
                 httpPost = null;
             }
-            if(httpClient != null){
+            if (httpClient != null) {
                 httpClient = null;
             }
         }
@@ -103,65 +101,57 @@ public class FindSchoolSelect extends AsyncTask<Void, Void, Void> {
         super.onPostExecute(result);
 
         // 화면갱신
-        adapter.notifyDataSetChanged();
+       adapter.notifyDataSetChanged();
     }
 
     // ArrayList<DTO>로 넘어왔을때
     private void readJsonStream(InputStream inputStream) throws IOException {
-        JsonReader reader = new JsonReader
-                (new InputStreamReader(inputStream, "utf-8"));
+        JsonReader reader = new JsonReader (new InputStreamReader(inputStream, "utf-8"));
+
         try {
+
+
             reader.beginArray();
-            while (reader.hasNext()){
+            while (reader.hasNext()) {
+
                 dtos.add(readMessage(reader));
+
             }
             reader.endArray();
 
-        }catch (Exception e){
+        } catch (Exception e) {
             e.getMessage();
-        }finally {
+        } finally {
             reader.close();
         }
 
     }
 
     // 하나의 DTO형태로 데이터를 받을때 파싱하는 부분
-    private SchoolDTO readMessage(JsonReader reader) throws IOException {
-        String school_name="", school_id="", location_id="", type_id="", school_location="";
+    private HomeworkDTO readMessage(JsonReader reader) throws IOException {
+        String homework_name = "", homework_done = "", homework_sub_date = "", homework_score="";
+        Log.d(TAG, "22: " + homework_name);
+
 
         reader.beginObject();
-        Log.d(TAG, "readMessage확인: "+ reader);
-        while (reader.hasNext()){
+        while (reader.hasNext()) {
             String readStr = reader.nextName();
-            Log.d(TAG, "readStr : "+ readStr);
-            if(readStr.equals("school_name")){
-                school_name = reader.nextString();
-            }else if(readStr.equals("school_id")){
-                school_id = reader.nextString();
-            }else if(readStr.equals("location_id")){
-                location_id = reader.nextString();
-            }else if(readStr.equals("type_id")){
-                type_id = reader.nextString();
-            }else if(readStr.equals("school_location")){
-                school_location = reader.nextString();
-            }else {
+            if (readStr.equals("homework_name")) {
+                homework_name = reader.nextString();
+            } else if (readStr.equals("homework_done")) {
+                homework_done = reader.nextString();
+            } else if (readStr.equals("homework_sub_date")) {
+                homework_sub_date = reader.nextString();
+            }else if (readStr.equals("homework_score")) {
+                homework_score = reader.nextString();
+            } else {
                 reader.skipValue();
             }
         } // while
         reader.endObject();
 
-        Log.d(TAG, "school_name : "+ school_name);
-        Log.d(TAG, "school_location : "+ school_location);
-        return new SchoolDTO(school_id, school_name, location_id, type_id, school_location);
+        Log.d(TAG, "2 : ");
+        return new HomeworkDTO(homework_name,homework_done, homework_sub_date, homework_score);
     }
-
-
-
-
-
-
-
-
-
 
 }

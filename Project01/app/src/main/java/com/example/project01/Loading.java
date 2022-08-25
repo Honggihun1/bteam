@@ -22,8 +22,8 @@ public class Loading extends Activity {
         back = findViewById(R.id.back);
 
         Glide.with(this)
-                .load(R.drawable.splash3)
-                .centerCrop()
+                .load(R.drawable.splash5)
+                .fitCenter()
                 .into(back);            // 이미지를 넣을 이미지뷰
 
 
@@ -36,7 +36,7 @@ public class Loading extends Activity {
                 startActivity(intent);
                 finish();
             }
-        }, 1000);
+        }, 3000);
     }
 
     @Override

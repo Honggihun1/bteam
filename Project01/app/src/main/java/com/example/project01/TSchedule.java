@@ -159,7 +159,15 @@ public class TSchedule extends AppCompatActivity {
         calendarView.setSelectedDate(CalendarDay.today());
         tv1 = findViewById(R.id.tv1);
         tv1.setText(""+(CalendarDay.today().getMonth()+1) + "월" + CalendarDay.today().getDay() +"일 일정");
-        String schedule_date = String.valueOf(CalendarDay.today().getYear()+"/"+(CalendarDay.today().getMonth()+1)+"/"+CalendarDay.today().getDay());
+        String hmonth = ""+(CalendarDay.today().getMonth()+1);
+        if(CalendarDay.today().getMonth()+1 < 10){
+            hmonth = "0" + hmonth;
+        }
+        String hday = ""+CalendarDay.today().getDay();
+        if(CalendarDay.today().getDay() < 10){
+            hday = "0" + hday;
+        }
+        String schedule_date = String.valueOf(CalendarDay.today().getYear()+"/" + hmonth+"/"+ hday);
         Log.d(TAG, "오늘날짜: " + schedule_date);
         TScheduleSelect tScheduleSelect = new TScheduleSelect(dtos, adapter, schedule_date, teacherDTO.getTeacher_id());
         tScheduleSelect.execute();
@@ -421,7 +429,7 @@ public class TSchedule extends AppCompatActivity {
            // view.addSpan(new StyleSpan(Typeface.BOLD));   // 달력 안의 모든 숫자들이 볼드 처리됨
            //view.addSpan(new ForegroundColorSpan(Color.GREEN));
             //view.setBackgroundDrawable(drawable);
-            view.addSpan(new DotSpan(5, Color.RED));
+            view.addSpan(new DotSpan(10, Color.RED));
         }
     }
 

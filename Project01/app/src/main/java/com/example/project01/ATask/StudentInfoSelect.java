@@ -1,14 +1,13 @@
 package com.example.project01.ATask;
 
 import static com.example.project01.common.CommonMethod.ipConfig;
-import static com.example.project01.common.CommonMethod.studentDTO;
 
 import android.net.http.AndroidHttpClient;
 import android.os.AsyncTask;
 import android.util.JsonReader;
 import android.util.Log;
 
-import com.example.project01.DTO.StudentDTO;
+import com.example.project01.DTO.StudentInfoDTO;
 
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
@@ -24,18 +23,17 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.nio.charset.Charset;
 
-public class SLoginSelect extends AsyncTask<Void, Void, String> {
+public class StudentInfoSelect extends AsyncTask<Void, Void, String> {
 
-    private static final String TAG = "확인용";
-    String student_id, student_pw;
+    static String TAG = "확인";
+    String student_id;
     String state = "";
+    private Object StudentInfoDTO;
 
-    public SLoginSelect(String student_id, String student_pw) {
+    public StudentInfoSelect(String student_id) {
         this.student_id = student_id;
-        this.student_pw = student_pw;
     }
 
-    // 1. doInBackground 실행 전에 설정부분 : 초기화 설정
     @Override
     protected void onPreExecute() {
         super.onPreExecute();
@@ -60,11 +58,10 @@ public class SLoginSelect extends AsyncTask<Void, Void, String> {
             // 여기가 우리가 수정해야 하는 부분 :서버로 보내는 데이터
             // builder에 문자열 및 파일 첨부하는 곳
             builder.addTextBody("student_id", student_id, ContentType.create("Multipart/related", "utf-8"));
-            builder.addTextBody("student_pw", student_pw, ContentType.create("Multipart/related", "utf-8"));
 
             // 전송
             // 전송 Url : 우리가 수정해야 하는 부분
-            String postURL = ipConfig + "/app/HongSLogin";
+            String postURL = ipConfig + "/app/StudentInfo";
 
             // 그대로 복,툽
             InputStream inputStream=null;
@@ -76,8 +73,8 @@ public class SLoginSelect extends AsyncTask<Void, Void, String> {
             inputStream = httpEntity.getContent();  // 응답내용을 inputStream에 넣음
 
             // 응답처리 : DTO 형태 :
-            studentDTO = readMessage(inputStream);
-            Log.d(TAG, "studentDTO : " + studentDTO);
+            StudentInfoDTO = readMessage(inputStream);
+            Log.d(TAG, "StudentInfoDTO : " + StudentInfoDTO);
 
 
             // 응답처리 : 문자열(String) 형태
@@ -113,7 +110,6 @@ public class SLoginSelect extends AsyncTask<Void, Void, String> {
         return state;
     }
 
-
     // 2-1. 작업 중에 데이터를 받는 곳
     @Override               // 두번째 파라미터
     protected void onProgressUpdate(Void... values) {
@@ -128,37 +124,23 @@ public class SLoginSelect extends AsyncTask<Void, Void, String> {
     }
 
     // 하나의 DTO형태로 데이터를 받을 때 파싱하는 부분
-    private StudentDTO readMessage(InputStream inputStream) throws IOException {
+    private StudentInfoDTO readMessage(InputStream inputStream) throws IOException {
         JsonReader reader = new JsonReader(new InputStreamReader(inputStream, "utf-8"));
-        String student_id = "", student_name="", school_id ="", parent_phone="", student_phone="", class_id="" ;
-        int grade=0;
+        String student_name = "";
+
         reader.beginObject();
         while (reader.hasNext()){
             String readerStr = reader.nextName();
-            if(readerStr.equals("student_id")){
-                student_id = reader.nextString();
-            }else if(readerStr.equals("student_name")){
+            if(readerStr.equals("student_name")) {
                 student_name = reader.nextString();
-            }else if(readerStr.equals("school_id")){
-                school_id = reader.nextString();
-            }else if(readerStr.equals("parent_phone")){
-                parent_phone = reader.nextString();
-            }else if(readerStr.equals("student_phone")){
-                student_phone = reader.nextString();
-            }else if(readerStr.equals("class_id")){
-                class_id = reader.nextString();
-            }else if(readerStr.equals("grade")){
-                grade = reader.nextInt();
             }else{
                 reader.skipValue();
             }
         }
         reader.endObject();
 
-        return new StudentDTO(student_id, student_name, school_id, parent_phone, student_phone, class_id, grade);
+        return new StudentInfoDTO(student_name);
 
     }
-
-
 
 }

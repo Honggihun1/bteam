@@ -19,6 +19,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.project01.ATask.IdCheck;
 import com.example.project01.ATask.JoinInsert;
+import com.example.project01.ATask.SLoginSelect;
 import com.example.project01.DTO.IdsDTO;
 
 import java.util.ArrayList;
@@ -58,36 +59,7 @@ public class Join extends AppCompatActivity {
         warn2 = findViewById(R.id.warn2);
 
 
-        // 입력할 때마다 아이디 중복확인 ( DB 에 있는 ID가 많아질수록 가져오기 힘드므로 ID를 보내서 중복체크하는 방향으로 구현 )
- /*       etId.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-            }
 
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-                String id = etId.getText().toString();
-                dtos = new ArrayList<>();
-                IdsSelect idsSelect = new IdsSelect(dtos, Join.this);
-                try{
-                    idsSelect.execute().get();  // get() 해야 값을 가져옴 / trt catch 해줘야 함
-                }catch(Exception e){
-                }
-                for (int i=0; i < dtos.size(); i++) {
-                    if (id.equals( dtos.get(i).getId())) {
-                        warn1.setText("중복된 아이디입니다");
-                        break;
-                    }else{
-                        warn1.setText("");
-                    }
-                }
-            }
-
-            @Override
-            public void afterTextChanged(Editable s) {
-            }
-        });
- */
 
         // 아이디 중복확인 버튼 누를시
         btnId.setOnClickListener(new View.OnClickListener() {
@@ -262,11 +234,20 @@ public class Join extends AppCompatActivity {
                                 if (state.equals("1")) {
                                     Toast.makeText(Join.this,
                                             "정상적으로 회원가입이 되었습니다", Toast.LENGTH_SHORT).show();
+                                    SLoginSelect loginSelect = new SLoginSelect(id, pw);
+                                    try {
+                                        state = loginSelect.execute().get();
 
-                                    // 종료하고 학생 메인화면으로
-                                    finish();
-                                    Intent intent = new Intent(getApplicationContext(), SLogin.class);
+                                    } catch (ExecutionException e) {
+                                        e.printStackTrace();
+                                    } catch (InterruptedException e) {
+                                        e.printStackTrace();
+                                    }
+
+                                    // 로그인이 되었으므로 로그인화면 없애고 메인화면을 부른다
+                                    Intent intent = new Intent(Join.this, SMain.class);
                                     startActivity(intent);
+                                    finishAffinity();
 
 
                                 } else {

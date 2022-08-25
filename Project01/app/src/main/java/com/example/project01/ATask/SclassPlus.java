@@ -1,5 +1,6 @@
 package com.example.project01.ATask;
 
+
 import static com.example.project01.common.CommonMethod.ipConfig;
 
 import android.net.http.AndroidHttpClient;
@@ -19,20 +20,17 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.nio.charset.Charset;
 
-public class JoinInsert extends AsyncTask<Void, Void, String> {
-    private static final String TAG = "확인용";
-    String id, pw, name, school, phone_parent, phone_student, grade;
+public class SclassPlus extends AsyncTask<Void, Void, String> {
+    private static final String TAG = "main:SClass";
+
+    // 우리는 무조건 생성자를 만들어서 데이터를 넘겨받는다
+    String class_id;
+    String student_id;
     String state = "";
 
-    public JoinInsert(String id, String pw, String name, String school, String grade, String phone_parent, String phone_student) {
-        this.id = id;
-        this.pw = pw;
-        this.name = name;
-        this.school = school;
-        this.grade = grade;
-        this.phone_parent = phone_parent;
-        this.phone_student = phone_student;
-
+    public SclassPlus(String student_id, String class_id) {
+        this.student_id = student_id;
+        this.class_id = class_id;
     }
 
     // 반드시 선언해야 할것들 : 무조건 해야함 복,붙
@@ -41,32 +39,24 @@ public class JoinInsert extends AsyncTask<Void, Void, String> {
     HttpResponse httpResponse;   // 서버에서의 응답을 받는 부분
     HttpEntity httpEntity;       // 응답내용
 
-    @Override
+    // 2. 실질적으로 작업을 하는곳
+    @Override                   // 첫번째 파라메터
     protected String doInBackground(Void... voids) {
 
         try {
             // 무조건 해야함 : 복,붙
-
             MultipartEntityBuilder builder = MultipartEntityBuilder.create();
             builder.setMode(HttpMultipartMode.BROWSER_COMPATIBLE);
             builder.setCharset(Charset.forName("UTF-8"));
 
             // 여기가 우리가 수정해야 하는 부분 : 서버로 보내는 데이터
             // builder에 문자열 및 파일 첨부하는곳
-            builder.addTextBody("id", id, ContentType.create("Multipart/related", "UTF-8"));
-            builder.addTextBody("pw", pw, ContentType.create("Multipart/related", "UTF-8"));
-            builder.addTextBody("name", name, ContentType.create("Multipart/related", "UTF-8"));
-            builder.addTextBody("school", school, ContentType.create("Multipart/related", "UTF-8"));
-            builder.addTextBody("grade", grade, ContentType.create("Multipart/related", "UTF-8"));
-            builder.addTextBody("phone_parent", phone_parent, ContentType.create("Multipart/related", "UTF-8"));
-            builder.addTextBody("phone_student", phone_student, ContentType.create("Multipart/related", "UTF-8"));
-
-
+            builder.addTextBody("class_id", class_id, ContentType.create("Multipart/related", "UTF-8"));
+            builder.addTextBody("student_id", student_id, ContentType.create("Multipart/related", "UTF-8"));
 
             // 전송
             // 전송 Url : 우리가 수정해야 하는 부분
-            //String postURL = "http://211.223.59.27" + "/app/HongJoin";
-            String postURL = ipConfig + "/app/HongJoin";
+            String postURL = ipConfig + "/app/hongclassplus";
 
             // 그대로 복,붙
             InputStream inputStream = null;
@@ -105,9 +95,16 @@ public class JoinInsert extends AsyncTask<Void, Void, String> {
                 httpClient = null;
             }
         }
-        Log.d(TAG, "state는?: "+state+"끝");
+
         return state;
     }
+
+    /*// 2-1. 작업중에 데이터를 받는곳
+    @Override                       // 두번째 파라메터
+    protected void onProgressUpdate(Void... values) {
+        super.onProgressUpdate(values);
+    }*/
+
     // 3. doInBackground 실행(작업)후에 오는부분
     @Override                   // 세번째 파라메터
     protected void onPostExecute(String result) {
@@ -115,6 +112,6 @@ public class JoinInsert extends AsyncTask<Void, Void, String> {
 
         Log.d(TAG, "result: " + result);
     }
-
-
 }
+
+

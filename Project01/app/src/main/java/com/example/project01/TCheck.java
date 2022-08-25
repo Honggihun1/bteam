@@ -485,4 +485,23 @@ public class TCheck extends AppCompatActivity implements View.OnClickListener {
         
     }//addtoarray();
 
+
+
+    // 뒤로가기 버튼 2번 눌러야 종료
+    @Override
+    public void onBackPressed() {
+
+        // 뒤로가기를 눌렀을 때 만약 드로어 창이 열려있으면 드로어 창을 닫고
+        // 아니면 그냥 뒤로가기가 된다.
+        if (drawerLayout.isDrawerOpen(GravityCompat.START)) {
+            drawerLayout.closeDrawer(GravityCompat.START);
+        } else {
+            super.onBackPressed();  // 원래 선언한 작업
+        }
+
+
+    } // onBackPressed()
+
+
+
 }// TCheck

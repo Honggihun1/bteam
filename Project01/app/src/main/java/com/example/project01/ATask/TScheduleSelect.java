@@ -23,6 +23,7 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.nio.charset.Charset;
 import java.util.ArrayList;
+import java.util.HashMap;
 
 public class TScheduleSelect extends AsyncTask<Void, Void, Void> {
     static String TAG = "확인";
@@ -77,7 +78,7 @@ public class TScheduleSelect extends AsyncTask<Void, Void, Void> {
             httpResponse = httpClient.execute(httpPost); // 보내고 응답받는 부분
             httpEntity = httpResponse.getEntity();  // 응답내용을 저장
             inputStream = httpEntity.getContent();  // 응답내용을 inputStream에 넣음
-
+            Log.d(TAG, "확인: "+ teacher_id);
             // 응답처리 : 데이터가 ArrayList<DTO> 형태 :
             readJsonStream(inputStream);
 
@@ -112,10 +113,14 @@ public class TScheduleSelect extends AsyncTask<Void, Void, Void> {
 
     // ArrayList<DTO>로 넘어왔을때
     private void readJsonStream(InputStream inputStream) throws IOException {
-        JsonReader reader = new JsonReader
-                (new InputStreamReader(inputStream, "utf-8"));
+        Log.d(TAG, "111: " );
+
+        JsonReader reader = new JsonReader (new InputStreamReader(inputStream, "utf-8"));
+        Log.d(TAG, "222: " );
         try {
             reader.beginArray();
+           Log.d(TAG, "333: " );
+
             while (reader.hasNext()){
                 dtos.add(readMessage(reader));
             }
@@ -128,7 +133,9 @@ public class TScheduleSelect extends AsyncTask<Void, Void, Void> {
         }
 
     }
+    public static HashMap<String, String> map = new HashMap<String, String>();
 
+    //public Sting[] schedule_list
     // 하나의 DTO형태로 데이터를 받을때 파싱하는 부분
     private TScheduleDTO readMessage(JsonReader reader) throws IOException {
         String schedule="", schedule_date="";
@@ -142,6 +149,10 @@ public class TScheduleSelect extends AsyncTask<Void, Void, Void> {
                 schedule = reader.nextString();
             }else if(readStr.equals("schedule_date")){
                 schedule_date = reader.nextString();
+          //      map.put(schedule_date.substring(0,10), "1");
+         //       Log.d(TAG, "데이트: " + schedule_date.substring(0,10));
+          //      Log.d(TAG, "맵: " + map);
+          //     Log.d(TAG, "맵: " + map.get("2022-07-11"));
             }else {
                 reader.skipValue();
             }
